@@ -18,9 +18,6 @@ import validators
 # Get table name from environment variable
 TABLE_NAME = os.environ.get("TABLE_NAME", "url-shortener")
 
-# DynamoDB client (created outside handler for reuse across invocations)
-dynamodb = boto3.resource("dynamodb")
-
 
 def generate_short_code(url: str) -> str:
     """
@@ -79,6 +76,7 @@ def handler(event: dict, context) -> dict:
         created_at = datetime.now(timezone.utc).isoformat()
         
         # Save to DynamoDB
+        dynamodb = boto3.resource("dynamodb")
         table = dynamodb.Table(TABLE_NAME)
         table.put_item(
             Item={

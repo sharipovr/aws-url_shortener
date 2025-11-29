@@ -8,14 +8,10 @@ import json
 import os
 
 import boto3
-from boto3.dynamodb.conditions import Key
 
 
 # Get table name from environment variable
 TABLE_NAME = os.environ.get("TABLE_NAME", "url-shortener")
-
-# DynamoDB client
-dynamodb = boto3.resource("dynamodb")
 
 
 def handler(event: dict, context) -> dict:
@@ -44,6 +40,7 @@ def handler(event: dict, context) -> dict:
             }
         
         # Look up in DynamoDB
+        dynamodb = boto3.resource("dynamodb")
         table = dynamodb.Table(TABLE_NAME)
         response = table.get_item(Key={"short_code": short_code})
         
