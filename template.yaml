@@ -8,11 +8,16 @@ Description: URL Shortener - Serverless API with Lambda and DynamoDB
 Globals:
   Function:
     Timeout: 10
-    Runtime: python3.11
+    Runtime: python3.12
     MemorySize: 128
-    Environment:
-      Variables:
-        TABLE_NAME: !Ref UrlTable
+
+# ============================================================================
+# Parameters
+# ============================================================================
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
 
 # ============================================================================
 # Resources
@@ -38,6 +43,9 @@ Resources:
       Description: Creates a short URL from a long URL
       CodeUri: src/handlers/
       Handler: create_url.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref UrlTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UrlTable
@@ -56,6 +64,9 @@ Resources:
       Description: Redirects short URL to original URL
       CodeUri: src/handlers/
       Handler: redirect.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref UrlTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UrlTable

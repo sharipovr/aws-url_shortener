@@ -87,9 +87,18 @@ def handler(event: dict, context) -> dict:
             }
         )
         
-        # Build response
-        # Note: BASE_URL will be set after deployment
-        base_url = os.environ.get("BASE_URL", "http://localhost:3000")
+        # Build response URL from request context
+        # API Gateway provides host and stage in the event
+        headers = event.get("headers", {}) or {}
+        host = headers.get("Host") or headers.get("host", "localhost:3000")
+        stage = event.get("requestContext", {}).get("stage", "")
+        
+        # Build base URL
+        if "localhost" in host:
+            base_url = f"http://{host}"
+        else:
+            base_url = f"https://{host}/{stage}" if stage else f"https://{host}"
+        
         short_url = f"{base_url}/{short_code}"
         
         return {
