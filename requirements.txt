@@ -1,0 +1,9 @@
+# AWS URL Shortener - Production Dependencies
+# Python 3.11+
+
+# AWS SDK
+boto3==1.34.0
+
+# URL validation
+validators==0.22.0
+
