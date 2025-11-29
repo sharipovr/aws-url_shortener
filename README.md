@@ -15,8 +15,8 @@ Build a simple URL shortener to learn AWS serverless architecture:
 🚧 **Work in Progress**
 
 - [x] Project setup
-- [ ] Create URL Lambda function
-- [ ] Redirect Lambda function
+- [x] Create URL Lambda function
+- [x] Redirect Lambda function
 - [ ] Unit tests
 - [ ] SAM template
 - [ ] Deploy to AWS
