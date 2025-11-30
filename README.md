@@ -1,6 +1,8 @@
-# AWS URL Shortener
+# AWS URL Shortener (Python)
 
 Serverless URL shortener built with AWS Lambda, API Gateway, and DynamoDB.
+
+**Python version** — see also [Go version](../aws-url_shortener-go) for comparison.
 
 ## Architecture
 
@@ -12,20 +14,23 @@ Serverless URL shortener built with AWS Lambda, API Gateway, and DynamoDB.
                  └─────────────────┘     └────────────────┘
 ```
 
-**Services used:**
-- AWS Lambda — serverless compute
-- Amazon API Gateway — HTTP endpoints
-- Amazon DynamoDB — NoSQL database
-- AWS SAM — infrastructure as code
+## Performance Comparison
 
-## Live Demo
+Same project implemented in Python and Go:
 
-**API Endpoint:** `https://4jgryzxjr0.execute-api.us-east-1.amazonaws.com/prod`
+| Metric | Python | Go | Notes |
+|--------|--------|-----|-------|
+| **Memory Used** | 83 MB | 39 MB | Go uses 2x less |
+| **Cold Start** | ~500ms | ~100ms | Go is 5x faster |
+| **Code Style** | Dynamic typing | Static typing | Different paradigms |
+| **Dependencies** | pip + venv | go modules | Both have good tooling |
+
+## API Usage
 
 ### Create Short URL
 
 ```bash
-curl -X POST https://4jgryzxjr0.execute-api.us-east-1.amazonaws.com/prod/urls \
+curl -X POST https://YOUR_API.execute-api.us-east-1.amazonaws.com/prod/urls \
   -H "Content-Type: application/json" \
   -d '{"url": "https://github.com/sharipovr"}'
 ```
@@ -34,7 +39,7 @@ Response:
 ```json
 {
   "short_code": "054317f",
-  "short_url": "https://4jgryzxjr0.execute-api.us-east-1.amazonaws.com/prod/054317f",
+  "short_url": "https://YOUR_API.../prod/054317f",
   "original_url": "https://github.com/sharipovr",
   "created_at": "2025-11-29T05:03:32.563256+00:00"
 }
@@ -42,9 +47,8 @@ Response:
 
 ### Redirect
 
-Open in browser or use curl:
 ```bash
-curl -L https://4jgryzxjr0.execute-api.us-east-1.amazonaws.com/prod/054317f
+curl -L https://YOUR_API.execute-api.us-east-1.amazonaws.com/prod/054317f
 ```
 
 ## Project Structure
@@ -64,7 +68,7 @@ aws-url_shortener/
 └── requirements-dev.txt   # dev dependencies (pytest, moto)
 ```
 
-## Local Development
+## Development
 
 ### Prerequisites
 - Python 3.12+
@@ -145,8 +149,6 @@ Redirect to original URL.
 | Testing   | pytest + moto      |
 
 ## Cleanup
-
-To delete all AWS resources:
 
 ```bash
 sam delete --stack-name url-shortener
